@@ -1,0 +1,18 @@
+[project]
+name = "reachy"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pygobject>=3.46.0",
+]
+
+[tool.uv]
+required-environments = ["sys_platform == 'darwin' and platform_machine == 'arm64'"]
+
+[dependency-groups]
+sim = [
+    "pygobject>=3.46.0",
+    "reachy-mini[mujoco]>=1.4.0",
+]

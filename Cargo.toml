@@ -1,0 +1,14 @@
+[package]
+name = "reachy"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+mujoco-rs = { version = "4.0.1", features = ["viewer"] }
+
+# Workaround for mujoco-rs#100 (macOS viewer fails with
+# "OpenGL ARB_framebuffer_object required"). Upstream glutin PR #1740 makes
+# the macOS CGL backend pick a context that exposes modern extensions.
+# Drop this once that PR is merged and released.
+[patch.crates-io]
+glutin = { git = "https://github.com/kalzoo/glutin", branch = "try-init-pixel-format-without-profile" }

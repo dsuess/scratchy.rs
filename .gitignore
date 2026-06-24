@@ -1,18 +1,13 @@
 .venv/
 __pycache__/
-<<<<<<< HEAD
-||||||| parent of a8aa2cd (Basic mujoco setup)
 zig-out
 .zig-cache
-=======
-zig-out
-.zig-cache
-
 
 # Added by cargo
-
 /target
+
+# Stray manual rustc artifacts
+*.rlib
 
 # Vendored MuJoCo framework (~25MB, fetched via `just mujoco-install`)
 /vendor/mujoco/
->>>>>>> a8aa2cd (Basic mujoco setup)

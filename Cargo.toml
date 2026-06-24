@@ -4,7 +4,20 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-mujoco-rs = { version = "4.0.1", features = ["viewer"] }
+mujoco-rs = { version = "4.0.1", features = ["viewer"], optional = true }
+
+[features]
+default = ["sim"]        # laptop dev "just works"; CM4 build uses --no-default-features
+sim = ["dep:mujoco-rs"]
+hardware = []            # add the real servo driver crate here later
+
+[[bin]]
+name = "sim"
+required-features = ["sim"]
+
+[[bin]]
+name = "hw"
+required-features = ["hardware"]
 
 # Workaround for mujoco-rs#100 (macOS viewer fails with
 # "OpenGL ARB_framebuffer_object required"). Upstream glutin PR #1740 makes

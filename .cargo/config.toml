@@ -1,0 +1,13 @@
+# MuJoCo is vendored at vendor/mujoco/mujoco.framework. The dylib's install
+# name is @rpath/mujoco.framework/Versions/A/libmujoco.3.8.0.dylib, but
+# mujoco-rs doesn't add an LC_RPATH to the final binary — so dyld has nowhere
+# to resolve @rpath and the binary aborts at launch ("no LC_RPATH's found").
+#
+# Bake an rpath pointing at the dir that *contains* mujoco.framework. The path
+# is relative to the binary (@loader_path = target/<profile>/), so it works in
+# tree for both `cargo run` (debug) and release builds without hardcoding an
+# absolute path.
+#
+# This won't work for actual release builds though
+[target.'cfg(target_os = "macos")']
+rustflags = ["-C", "link-arg=-Wl,-rpath,@loader_path/../../vendor/mujoco"]

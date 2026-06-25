@@ -20,6 +20,10 @@ pub type ActuatorAngles = [f64; NUM_ACTUATORS];
 pub trait ActuatorIO {
     fn set_angles(&mut self, angles: &ActuatorAngles) -> Result<()>;
     fn angles(&mut self) -> Result<ActuatorAngles>;
+    fn step(&mut self) -> () {}
+    fn alive(&mut self) -> bool {
+        true
+    }
 }
 
 #[cfg(test)]
@@ -27,7 +31,7 @@ mod testing {
     use super::*;
 
     /// In-memory backend that just echoes back the angles last written.
-    #[derive(Default)]
+    #[derive(Debug, Default)]
     pub struct TestIO {
         angles: ActuatorAngles,
     }
@@ -53,22 +57,47 @@ mod testing {
 }
 
 #[cfg(feature = "sim")]
-mod sim {
+pub mod sim {
     use super::*;
+    use mujoco_rs::viewer::ViewerSharedState;
     use mujoco_rs::wrappers::{MjData, MjModel};
-    use std::ops::Deref;
 
-    impl<M: Deref<Target = MjModel>> ActuatorIO for MjData<M> {
+    use std::ops::Deref;
+    use std::sync::{Arc, Mutex};
+
+    #[derive(Debug)]
+    pub struct InteractiveSimulation<M: Deref<Target = MjModel>> {
+        pub data: MjData<M>,
+        pub viewer_state: Option<Arc<Mutex<ViewerSharedState>>>,
+    }
+
+    impl<M: Deref<Target = MjModel>> ActuatorIO for InteractiveSimulation<M> {
         fn set_angles(&mut self, angles: &ActuatorAngles) -> Result<()> {
-            let ctrl = self.ctrl_mut();
+            let ctrl = self.data.ctrl_mut();
             ctrl.copy_from_slice(angles);
             Ok(())
         }
 
         fn angles(&mut self) -> Result<ActuatorAngles> {
             // TODO Correct error handling!
-            let result = self.qpos().try_into().unwrap();
+            let result = self.data.ctrl().try_into().expect("Could not read");
             Ok(result)
+        }
+
+        fn step(&mut self) -> () {
+            self.data.step();
+            if let Some(viewer_state) = &mut self.viewer_state {
+                let mut state = viewer_state.lock().unwrap();
+                state.sync_data(&mut self.data);
+            }
+        }
+
+        fn alive(&mut self) -> bool {
+            if let Some(viewer_state) = &mut self.viewer_state {
+                let state = viewer_state.lock().unwrap();
+                return state.running();
+            }
+            true
         }
     }
 }

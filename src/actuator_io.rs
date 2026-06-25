@@ -104,30 +104,88 @@ pub mod sim {
 
 #[cfg(feature = "hardware")]
 pub mod hardware {
+    use std::sync::Arc;
+    use std::sync::atomic::{AtomicBool, Ordering};
+    use std::time::Duration;
+
+    use ctrlc;
+    use rustypot::servo::dynamixel::xl330::Xl330Controller;
+    use serialport;
+
     use super::*;
 
-    /// Drives the real Reachy Mini servos.
-    ///
-    /// Stub: the actual servo-bus driver (serial protocol, etc.) is not wired up
-    /// yet — see the follow-ups in the plan.
+    const SERIAL_PORT_TTY_DEVICE: &str = "/dev/ttyAMA3";
+    const SERVO_IDS: [u8; NUM_ACTUATORS] = [10, 11, 12, 13, 14, 15, 16, 17, 18];
+
     pub struct HardwareIO {
-        _private: (),
+        controller: Xl330Controller,
+        shutdown: Arc<AtomicBool>,
     }
 
     impl HardwareIO {
-        /// Open the connection to the actuator bus.
         pub fn new() -> Result<Self> {
-            todo!("connect to the Reachy Mini servo bus")
+            let comms_port = serialport::new(SERIAL_PORT_TTY_DEVICE, 1_000_000)
+                .timeout(Duration::from_millis(100))
+                .open()
+                .expect(&format!("Failed opening device {}", SERIAL_PORT_TTY_DEVICE));
+            let controller = Xl330Controller::new()
+                .with_protocol_v2()
+                .with_serial_port(comms_port);
+            let mut result = HardwareIO {
+                controller,
+                shutdown: Arc::new(AtomicBool::new(false)),
+            };
+
+            {
+                let handler_flag = result.shutdown.clone();
+                ctrlc::set_handler(move || {
+                    handler_flag.store(true, Ordering::Relaxed);
+                })
+                .expect("Failed to install Ctrl-C handler");
+            }
+
+            // Turn off all torques by default
+            result
+                .controller
+                .sync_write_torque_enable(&SERVO_IDS, &[false; NUM_ACTUATORS])
+                .unwrap();
+
+            Ok(result)
+        }
+
+        pub fn enable_servos(mut self, indices: &[usize]) -> Result<Self> {
+            let ids: Vec<u8> = indices
+                .iter()
+                .filter_map(|&i| SERVO_IDS.get(i).copied())
+                .collect();
+            let vals = vec![true; ids.len()];
+            self.controller
+                .sync_write_torque_enable(&ids, &vals)
+                .unwrap();
+            Ok(self)
         }
     }
 
     impl ActuatorIO for HardwareIO {
-        fn set_angles(&mut self, _angles: &ActuatorAngles) -> Result<()> {
-            todo!("write target angles to the servos")
+        fn set_angles(&mut self, angles: &ActuatorAngles) -> Result<()> {
+            self.controller
+                .sync_write_goal_position(&SERVO_IDS, angles)
+                .expect("Failed writing");
+            Ok(())
         }
 
         fn angles(&mut self) -> Result<ActuatorAngles> {
-            todo!("read current angles from the servos")
+            let result: ActuatorAngles = self
+                .controller
+                .sync_read_present_position(&SERVO_IDS)
+                .expect("Cannot read positions")
+                .try_into()
+                .expect("Cannot convert");
+            Ok(result)
+        }
+
+        fn alive(&mut self) -> bool {
+            !self.shutdown.load(Ordering::Relaxed)
         }
     }
 }

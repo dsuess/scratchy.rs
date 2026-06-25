@@ -4,7 +4,7 @@ use mujoco_rs::prelude::*;
 use mujoco_rs::viewer::MjViewer;
 
 use reachy::actuator_io::sim::InteractiveSimulation;
-use reachy::actuator_io::{ActuatorIO, NUM_ACTUATORS};
+use reachy::actuator_io::NUM_ACTUATORS;
 use reachy::control::run_test;
 
 const MODEL_PATH: &str = "vendor/reachy_mini/descriptions/reachy_mini/mjcf/scene.xml";

@@ -1,16 +1,12 @@
 use std::time::Duration;
 
 use reachy::actuator_io::{ActuatorIO, hardware::HardwareIO};
-use reachy::control::targets_at;
+use reachy::control::{LEFT_ANTENNA, RIGHT_ANTENNA, YAW_BODY, run_test};
 
 fn main() {
-    let mut io = HardwareIO::new().expect("connect to actuators");
-
-    let dt = 0.01; // 100 Hz; see skills/control-loops.md
-    let mut t = 0.0_f64;
-    loop {
-        io.set_angles(&targets_at(t)).expect("write angles");
-        std::thread::sleep(Duration::from_secs_f64(dt));
-        t += dt;
-    }
+    let mut io = HardwareIO::new()
+        .expect("connect to actuators")
+        .enable_servos(&[YAW_BODY, LEFT_ANTENNA, RIGHT_ANTENNA])
+        .expect("Failed setting servos");
+    run_test(&mut io, Duration::from_millis(10));
 }

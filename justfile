@@ -1,17 +1,9 @@
-venv := ".venv"
-mujoco_dir := justfile_directory() / "vendor/mujoco"
+hw_target := "aarch64-unknown-linux-gnu"
+hw_host := "reachy"
 
-default: setup
-
-setup:
-    brew install gstreamer
-    uv sync --all-groups --python /opt/homebrew/bin/python3.11
-
-sim *args="":
-    GI_TYPELIB_PATH=/opt/homebrew/lib/girepository-1.0 DYLD_LIBRARY_PATH=/opt/homebrew/lib uv run mjpython -m reachy_mini.daemon.app.main --sim {{args}}
-
-sim-debug *args="":
-    GI_TYPELIB_PATH=/opt/homebrew/lib/girepository-1.0 DYLD_LIBRARY_PATH=/opt/homebrew/lib uv run mjpython scripts/debug_daemon.py --sim {{args}}
-
-clean:
-    rm -rf {{venv}}
+# Cross-compile the hw binary for the Reachy Mini Wireless (CM4 / aarch64),
+# copy it to the robot, and run it in an interactive ssh session.
+deploy:
+    cross build --release --target {{hw_target}} --bin hw --no-default-features --features hardware
+    scp target/{{hw_target}}/release/hw {{hw_host}}:hw
+    ssh -t {{hw_host}} ./hw

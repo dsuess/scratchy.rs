@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="240" viewBox="0 0 900 240" role="img" aria-label="Reachy Mini — from-scratch control stack">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d1117"/>
+      <stop offset="1" stop-color="#161b29"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#4f9dff"/>
+      <stop offset="1" stop-color="#9b6dff"/>
+    </linearGradient>
+    <style>
+      .wm { font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-weight: 800; letter-spacing: 6px; }
+      .sub { font-family: "SFMono-Regular", "JetBrains Mono", Consolas, monospace; font-weight: 500; letter-spacing: 1px; }
+      .tag { font-family: "SFMono-Regular", "JetBrains Mono", Consolas, monospace; font-weight: 600; }
+    </style>
+  </defs>
+
+  <!-- card -->
+  <rect x="0" y="0" width="900" height="240" rx="24" fill="url(#bg)"/>
+  <rect x="1.5" y="1.5" width="897" height="237" rx="22.5" fill="none" stroke="#2a3142" stroke-width="3"/>
+
+  <!-- little robot head mark -->
+  <g transform="translate(96,120)">
+    <!-- antennae -->
+    <line x1="-22" y1="-52" x2="-34" y2="-78" stroke="url(#accent)" stroke-width="5" stroke-linecap="round"/>
+    <line x1="22" y1="-52" x2="34" y2="-78" stroke="url(#accent)" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="-34" cy="-80" r="6" fill="#9b6dff"/>
+    <circle cx="34" cy="-80" r="6" fill="#4f9dff"/>
+    <!-- head -->
+    <rect x="-44" y="-50" width="88" height="78" rx="22" fill="#1b2233" stroke="url(#accent)" stroke-width="4"/>
+    <!-- eyes -->
+    <circle cx="-16" cy="-12" r="9" fill="#4f9dff"/>
+    <circle cx="16" cy="-12" r="9" fill="#9b6dff"/>
+    <!-- base / body yaw ring -->
+    <ellipse cx="0" cy="46" rx="50" ry="13" fill="none" stroke="#2a3142" stroke-width="6"/>
+    <ellipse cx="0" cy="46" rx="50" ry="13" fill="none" stroke="url(#accent)" stroke-width="3" stroke-dasharray="6 10"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="200" y="118" class="wm" font-size="58" fill="#f0f3fa">REACHY</text>
+  <text x="202" y="158" class="sub" font-size="20" fill="#8b93a7">from-scratch control stack</text>
+
+  <!-- tags -->
+  <g class="tag" font-size="13" fill="#aab2c5">
+    <rect x="202" y="182" width="60" height="26" rx="6" fill="#1b2233" stroke="#2a3142"/>
+    <text x="232" y="199" text-anchor="middle" fill="#ff8a6d">Rust</text>
+    <rect x="270" y="182" width="78" height="26" rx="6" fill="#1b2233" stroke="#2a3142"/>
+    <text x="309" y="199" text-anchor="middle" fill="#7ab7ff">MuJoCo</text>
+    <rect x="356" y="182" width="104" height="26" rx="6" fill="#1b2233" stroke="#2a3142"/>
+    <text x="408" y="199" text-anchor="middle" fill="#9b6dff">Dynamixel</text>
+    <rect x="468" y="182" width="84" height="26" rx="6" fill="#1b2233" stroke="#2a3142"/>
+    <text x="510" y="199" text-anchor="middle" fill="#ffd479">real-time</text>
+  </g>
+</svg>

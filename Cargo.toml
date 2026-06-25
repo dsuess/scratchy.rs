@@ -5,6 +5,7 @@ edition = "2024"
 
 [dependencies]
 mujoco-rs = { version = "4.0.1", features = ["viewer"], optional = true }
+spin_sleep = "1.3.3"
 
 [features]
 default = ["sim"]        # laptop dev "just works"; CM4 build uses --no-default-features

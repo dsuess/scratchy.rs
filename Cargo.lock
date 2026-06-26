@@ -1371,17 +1371,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "20675572f6f24e9e76ef639bc5552774ed45f1c30e2951e1e99c59888861c539"
 
 [[package]]
-name = "reachy"
-version = "0.1.0"
-dependencies = [
- "ctrlc",
- "mujoco-rs",
- "rustypot",
- "serialport",
- "spin_sleep",
-]
-
-[[package]]
 name = "redox_syscall"
 version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1505,6 +1494,17 @@ name = "scopeguard"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
+
+[[package]]
+name = "scratchy"
+version = "0.1.0"
+dependencies = [
+ "ctrlc",
+ "mujoco-rs",
+ "rustypot",
+ "serialport",
+ "spin_sleep",
+]
 
 [[package]]
 name = "sctk-adwaita"

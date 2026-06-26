@@ -1,6 +1,8 @@
 <div align="center">
 
-<img src="assets/banner.svg" alt="Reachy Mini — from-scratch control stack" width="720">
+<img src="assets/banner.svg" alt="Scratchy — a from-scratch Reachy Mini control stack" width="720">
+
+# Scratchy
 
 <br>
 
@@ -11,7 +13,7 @@
 ![Platform](https://img.shields.io/badge/robot-Reachy%20Mini%20Lite%20%2B%20Wireless-1b2233)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-**A Reachy Mini control stack, built from scratch in Rust — no official SDK, no daemon, no Zenoh.**
+**A [Reachy Mini](https://www.pollen-robotics.com/) control stack, built from scratch in Rust — no official SDK, no daemon, no Zenoh.**
 
 </div>
 
@@ -20,8 +22,8 @@
 ## What is this?
 
 [Reachy Mini](https://www.pollen-robotics.com/) is a 6-DOF robot head (Stewart platform) on a
-rotating body, with two antennae. This repo is a **learning project**: instead of using the
-official SDK, we rebuild the control stack one layer at a time — motor bus → kinematics →
+rotating body, with two antennae. **Scratchy** is a **learning project**: instead of using the
+official SDK, it rebuilds the control stack one layer at a time — motor bus → kinematics →
 real-time control loop → real hardware — to understand how production robot software is
 actually structured.
 

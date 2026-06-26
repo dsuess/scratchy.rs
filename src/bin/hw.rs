@@ -1,7 +1,7 @@
 use std::time::Duration;
 
-use reachy::actuator_io::{ActuatorIO, hardware::HardwareIO};
-use reachy::control::{LEFT_ANTENNA, RIGHT_ANTENNA, YAW_BODY, run_test};
+use scratchy::actuator_io::{ActuatorIO, hardware::HardwareIO};
+use scratchy::control::{LEFT_ANTENNA, RIGHT_ANTENNA, YAW_BODY, run_test};
 
 fn main() {
     let mut io = HardwareIO::new()

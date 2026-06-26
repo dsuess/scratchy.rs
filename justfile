@@ -1,5 +1,5 @@
 hw_target := "aarch64-unknown-linux-gnu"
-hw_host := "reachy"
+hw_host := "reachy-mini.local"
 
 default: help
 

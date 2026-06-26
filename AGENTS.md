@@ -1,6 +1,6 @@
-# Reachy Mini — Dev Guide (for agents & humans)
+# Scratchy — Dev Guide (for agents & humans)
 
-This repo is a **from-scratch Rust control stack** for the Reachy Mini robot. We are *not*
+**Scratchy** is a **from-scratch Rust control stack** for the Reachy Mini robot. We are *not*
 using the official Python SDK or its daemon/Zenoh/Rust crates — we rebuild each layer
 (motor bus → kinematics → real-time control loop → hardware) by hand to learn how robot
 software is structured. See [`README.md`](README.md) for the pitch and

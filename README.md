@@ -64,8 +64,7 @@ flowchart TD
     HW["HardwareIO<br/>Dynamixel XL-330"]
     TEST["TestIO<br/>in-memory, for tests"]
 
-    LOOP -. "pose → angles<br/>(planned)" .-> IK
-    IK -. "" .-> LOOP
+    LOOP <-.->|"pose ↔ angles (planned)"| IK
     LOOP --> IO
     IO --> SIM
     IO --> HW

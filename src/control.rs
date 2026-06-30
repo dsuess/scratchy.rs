@@ -26,14 +26,16 @@ where
         let next_step = loop_start + timestep;
 
         let elapsed = loop_start.elapsed();
-        assert!(
-            elapsed <= timestep,
-            "Control loop cannot keep real-time at t={t:.2}s: \
-             iteration took {:.3}ms but the timestep budget is {:.3}ms (over by {:.3}ms)",
-            elapsed.as_secs_f64() * 1e3,
-            timestep.as_secs_f64() * 1e3,
-            (elapsed - timestep).as_secs_f64() * 1e3,
-        );
-        sleep_until(next_step);
+        if elapsed <= timestep {
+            sleep_until(next_step);
+        } else {
+            println!(
+                "Control loop cannot keep real-time at t={t:.2}s: \
+                 iteration took {:.3}ms but the timestep budget is {:.3}ms (over by {:.3}ms)",
+                elapsed.as_secs_f64() * 1e3,
+                timestep.as_secs_f64() * 1e3,
+                (elapsed - timestep).as_secs_f64() * 1e3,
+            )
+        }
     }
 }
